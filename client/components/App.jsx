@@ -16,14 +16,8 @@ class App extends React.Component {
     return (<div>
       <h1>🥸</h1>
       <form onSubmit={callApi}>
-        <h3>Walmart username</h3>
-        <input name="email" placeholder="Enter Walmart username here" width="300px"/><br />
-        <h3>Walmart password</h3>
-        <input name="password" type="password" placeholder="Enter Walmart password here" /><br />
         <h3>Walmart URL</h3>
         <input name="url" placeholder="Enter URL for Playstation model here"/><br />
-        <h3>CVV</h3>
-        <input name="cvvVal" placeholder="Enter CVV here" /><br />
         <button type="submit">Start bot</button>
       </form>
       </div>);

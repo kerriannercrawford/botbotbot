@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer-extra');
+require('dotenv').config()
 
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin())
@@ -8,8 +9,8 @@ puppeteer.use(AdblockerPlugin({ blockTrackers: true }))
 const mainController = {};
 
 mainController.get = async (req, res, next) => {
-  const { email, password, url, cvvVal } = req.body;
-  await checkout(email, password, url, cvvVal)
+  const { url } = req.body;
+  await checkout(url)
   next();
 };
 
@@ -17,7 +18,7 @@ mainController.get = async (req, res, next) => {
 const loginUrl = 'https://www.walmart.com/account/login'
 
 async function initBrowser() {
-  const browser = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless'] });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15')
   await page.goto(loginUrl);
@@ -67,8 +68,7 @@ async function continueToCheckout(page) {
   })
 }
 
-async function login(page, email, pass) {
-  console.log(email, pass)
+async function login(page) {
   await page.evaluate((loginInfo) => {
     let emailField = document.getElementById('email')
     emailField.value = loginInfo[0];
@@ -80,7 +80,7 @@ async function login(page, email, pass) {
         elem.click()
       }
     }
-  }, [email, pass])
+  }, [process.env.EMAIL, process.env.PASSWORD])
 }
 
 async function pullUpItem(page, url) {
@@ -88,12 +88,11 @@ async function pullUpItem(page, url) {
   return page;
 }
 
-async function cvv(page, cvvVal) {
-  console.log(cvvVal)
+async function cvv(page) {
   await page.evaluate((cvvVal) => {
     let elem = document.getElementById('ld_select_2')
     elem.value = cvvVal
-  }, cvvVal)
+  }, process.env.CVV)
 }
 
 async function submitOrder(page) {
@@ -108,14 +107,14 @@ async function submitOrder(page) {
 }
 
 
-async function checkout(email, pass, url, cvvVal) {
+async function checkout(url) {
   let page = await initBrowser();
-  await Promise.all([login(page, email, pass), timeout(3000)])
+  await Promise.all([login(page), timeout(3000)])
   page = await pullUpItem(page, url)
   await addToCart(page)
   await openCart(page)
   await Promise.all([continueToCheckout(page), timeout(3000)])
-  await cvv(page, cvvVal)
+  await cvv(page)
   // await submitOrder(page)
 }
 module.exports = mainController;
