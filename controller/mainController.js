@@ -17,7 +17,7 @@ mainController.get = async (req, res, next) => {
 const loginUrl = 'https://www.walmart.com/account/login'
 
 async function initBrowser() {
-  const browser = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox'] });
+  const browser = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox', '--headless'] });
   const page = await browser.newPage();
   await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15')
   await page.goto(loginUrl);
