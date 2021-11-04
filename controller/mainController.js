@@ -86,6 +86,7 @@ async function login(page) {
   await page.evaluate((loginInfo) => {
     console.log(loginInfo, 'login info')
     let emailField = document.getElementById('email')
+    console.log(emailField.value, 'emailvalue')
     emailField.setAttribute('value', loginInfo[0])
     let passwordField = document.getElementById('password')
     passwordField.setAttribute('value', loginInfo[1])
