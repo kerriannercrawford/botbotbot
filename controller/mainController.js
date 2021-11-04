@@ -82,14 +82,18 @@ async function hitContinue(page) {
 
 async function login(page) {
   await page.evaluate((loginInfo) => {
+    let div = document.getElementsByClassName('form-field')
+    console.log(div, 'div')
     let emailField = document.getElementById('email')
-    emailField.value = loginInfo[0];
+    console.log(emailField, 'email')
+    // emailField.value = loginInfo[0];
     let passwordField = document.getElementById('password')
-    passwordField.value = loginInfo[1];
+    console.log(passwordField, 'password')
+    // passwordField.value = loginInfo[1];
     let submit = document.getElementsByClassName('button m-margin-top text-inherit')
     for (let elem of submit) {
       if (elem.innerHTML === 'Sign in') {
-        elem.click()
+        // elem.click()
       }
     }
   }, [process.env.EMAIL, process.env.PASSWORD])
@@ -122,12 +126,12 @@ async function submitOrder(page) {
 async function checkout(url) {
   let page = await initBrowser();
   await Promise.all([login(page), timeout(3000)])
-  page = await pullUpItem(page, url)
-  await addToCart(page)
-  await openCart(page)
-  await Promise.all([continueToCheckout(page), timeout(3000)])
-  await Promise.all([hitContinue(page), timeout(3000)])
-  await cvv(page)
+  // page = await pullUpItem(page, url)
+  // await addToCart(page)
+  // await openCart(page)
+  // await Promise.all([continueToCheckout(page), timeout(3000)])
+  // await Promise.all([hitContinue(page), timeout(3000)])
+  // await cvv(page)
   // await submitOrder(page)
 }
 module.exports = mainController;
