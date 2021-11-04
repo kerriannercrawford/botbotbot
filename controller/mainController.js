@@ -81,15 +81,17 @@ async function hitContinue(page) {
 }
 
 async function login(page) {
+  await page.waitForSelector('#email')
+  await page.waitForSelector('#password')
   await page.evaluate((loginInfo) => {
     let div = document.getElementsByClassName('form-field')
     console.log(div, 'div')
     let emailField = document.getElementById('email')
+    emailField.value = loginInfo[0];
     console.log(emailField, 'email')
-    // emailField.value = loginInfo[0];
     let passwordField = document.getElementById('password')
+    passwordField.value = loginInfo[1];
     console.log(passwordField, 'password')
-    // passwordField.value = loginInfo[1];
     let submit = document.getElementsByClassName('button m-margin-top text-inherit')
     for (let elem of submit) {
       if (elem.innerHTML === 'Sign in') {
