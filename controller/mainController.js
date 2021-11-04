@@ -68,6 +68,18 @@ async function continueToCheckout(page) {
   })
 }
 
+async function hitContinue(page) {
+  await page.evaluate(() => {
+    let elems = document.getElementsByClassName('w_C8 w_DA w_DD w_DF')
+    for (let elem of elems) {
+      console.log(elem)
+      if (elem.innerText === 'Continue') {
+        elem.click()
+      }
+    }
+  })
+}
+
 async function login(page) {
   await page.evaluate((loginInfo) => {
     let emailField = document.getElementById('email')
@@ -114,6 +126,7 @@ async function checkout(url) {
   await addToCart(page)
   await openCart(page)
   await Promise.all([continueToCheckout(page), timeout(3000)])
+  await Promise.all([hitContinue(page), timeout(3000)])
   await cvv(page)
   // await submitOrder(page)
 }
