@@ -84,13 +84,11 @@ async function login(page) {
   await page.waitForSelector('#email')
   await page.waitForSelector('#password')
   await page.evaluate((loginInfo) => {
-    let div = document.getElementsByClassName('form-field')
-    console.log(div, 'div')
+    console.log(loginInfo, 'login info')
     let emailField = document.getElementById('email')
-    emailField.value = loginInfo[0];
-    console.log(emailField, 'email')
+    emailField.setAttribute('value', loginInfo[0])
     let passwordField = document.getElementById('password')
-    passwordField.value = loginInfo[1];
+    passwordField.setAttribute('value', loginInfo[1])
     console.log(passwordField, 'password')
     let submit = document.getElementsByClassName('button m-margin-top text-inherit')
     for (let elem of submit) {
